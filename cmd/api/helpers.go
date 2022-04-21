@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -17,4 +18,24 @@ func (app *application) readIDParameter(request *http.Request) (int64, error) {
 	}
 
 	return id, nil
+}
+
+func (app *application) writeJSON(writer http.ResponseWriter, status int, data interface{}, headers http.Header) error {
+	json, err := json.Marshal(data)
+	if err != nil {
+		app.logger.Println(err)
+		http.Error(writer, "catastrophic failure", http.StatusInternalServerError)
+		return err
+	}
+
+	json = append(json, '\n')
+
+	for key, value := range headers {
+		writer.Header()[key] = value
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(status)
+	writer.Write(json)
+	return nil
 }

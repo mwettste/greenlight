@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/mwettste/greenlight/internal/data"
+	"github.com/mwettste/greenlight/internal/validator"
 )
 
 func (app *application) createMovieHandler(writer http.ResponseWriter, request *http.Request) {
@@ -19,6 +20,20 @@ func (app *application) createMovieHandler(writer http.ResponseWriter, request *
 	err := app.readJSON(writer, request, &input)
 	if err != nil {
 		app.badRequestResponse(writer, request, err)
+		return
+	}
+
+	movie := &data.Movie{
+		Title:      input.Title,
+		Year:       input.Year,
+		RuntimeMin: input.Runtime,
+		Genres:     input.Genres,
+	}
+
+	v := validator.New()
+
+	if data.ValidateMovie(v, movie); !v.Valid() {
+		app.failedValidationResponse(writer, request, v.Errors)
 		return
 	}
 

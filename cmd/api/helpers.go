@@ -45,7 +45,11 @@ func (app *application) writeJSON(writer http.ResponseWriter, status int, data i
 }
 
 func (app *application) readJSON(writer http.ResponseWriter, request *http.Request, dst interface{}) error {
-	err := json.NewDecoder(request.Body).Decode(dst)
+	maxBytes := 1_048_576
+	request.Body = http.MaxBytesReader(writer, request.Body, int64(maxBytes))
+	decoder := json.NewDecoder(request.Body)
+	decoder.DisallowUnknownFields()
+	err := decoder.Decode(dst)
 	if err != nil {
 		var syntaxError *json.SyntaxError
 		var unmarshalTypeError *json.UnmarshalTypeError
@@ -68,6 +72,11 @@ func (app *application) readJSON(writer http.ResponseWriter, request *http.Reque
 		default:
 			return err
 		}
+	}
+
+	err = decoder.Decode(&struct{}{})
+	if err != io.EOF {
+		return errors.New("body must only contain a single JSON value")
 	}
 
 	return nil

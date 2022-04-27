@@ -1,9 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/mwettste/greenlight/internal/data"
 	"github.com/mwettste/greenlight/internal/validator"
@@ -37,7 +37,19 @@ func (app *application) createMovieHandler(writer http.ResponseWriter, request *
 		return
 	}
 
-	fmt.Fprintf(writer, "%+v\n", input)
+	err = app.models.Movies.Insert(movie)
+	if err != nil {
+		app.serverErrorResponse(writer, request, err)
+		return
+	}
+
+	headers := make(http.Header)
+	headers.Set("Location", fmt.Sprintf("/v1/movies/%d", movie.ID))
+
+	err = app.writeJSON(writer, http.StatusCreated, envelope{"movie": movie}, headers)
+	if err != nil {
+		app.serverErrorResponse(writer, request, err)
+	}
 }
 
 func (app *application) showMovieHandler(writer http.ResponseWriter, request *http.Request) {
@@ -47,13 +59,15 @@ func (app *application) showMovieHandler(writer http.ResponseWriter, request *ht
 		return
 	}
 
-	movie := data.Movie{
-		ID:         id,
-		CreatedAt:  time.Now(),
-		Title:      "Lord of the Rings - The Fellowship of the Ring",
-		RuntimeMin: 178,
-		Genres:     []string{"fantasy", "adventure"},
-		Version:    1,
+	movie, err := app.models.Movies.Get(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(writer, request)
+		default:
+			app.serverErrorResponse(writer, request, err)
+		}
+		return
 	}
 
 	err = app.writeJSON(writer, http.StatusOK, envelope{"movie": movie}, nil)

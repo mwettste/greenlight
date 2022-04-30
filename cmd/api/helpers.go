@@ -30,7 +30,7 @@ func (app *application) readIDParameter(request *http.Request) (int64, error) {
 func (app *application) writeJSON(writer http.ResponseWriter, status int, data interface{}, headers http.Header) error {
 	json, err := json.Marshal(data)
 	if err != nil {
-		app.logger.Println(err)
+		app.logger.PrintError(err, nil)
 		http.Error(writer, "catastrophic failure", http.StatusInternalServerError)
 		return err
 	}

@@ -30,9 +30,9 @@ func (v *Validator) Check(ok bool, key, message string) {
 	}
 }
 
-func In(value string, list ...string) bool {
-	for i := range list {
-		if value == list[i] {
+func PermittedValue[T comparable](value T, permittedValues ...T) bool {
+	for i := range permittedValues {
+		if value == permittedValues[i] {
 			return true
 		}
 	}
@@ -44,11 +44,11 @@ func Matches(value string, rx *regexp.Regexp) bool {
 	return rx.MatchString(value)
 }
 
-func Unique(values []string) bool {
-	uniqueValues := make(map[string]string)
+func Unique[T comparable](values []T) bool {
+	uniqueValues := make(map[T]bool)
 
 	for _, value := range values {
-		uniqueValues[value] = value
+		uniqueValues[value] = true
 	}
 
 	return len(values) == len(uniqueValues)

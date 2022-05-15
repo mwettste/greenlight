@@ -37,6 +37,24 @@ var sampleMovies = []data.Movie{
 		RuntimeMin: data.RuntimeMin(107),
 		Genres:     []string{"drama"},
 	},
+	{
+		Title:      "The Lord of the Rings - The Fellowship of the Ring",
+		Year:       2001,
+		RuntimeMin: data.RuntimeMin(178),
+		Genres:     []string{"action", "adventure", "drama"},
+	},
+	{
+		Title:      "The Lord of the Rings - The Two Towers",
+		Year:       2002,
+		RuntimeMin: data.RuntimeMin(179),
+		Genres:     []string{"action", "adventure", "drama"},
+	},
+	{
+		Title:      "The Lord of the Rings - The Return of the King",
+		Year:       2003,
+		RuntimeMin: data.RuntimeMin(201),
+		Genres:     []string{"action", "adventure", "drama"},
+	},
 }
 
 var filters = data.Filters{

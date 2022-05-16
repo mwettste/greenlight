@@ -53,11 +53,14 @@ func (app *application) registerUserHandler(writer http.ResponseWriter, request 
 		return
 	}
 
-	err = app.mailer.Send(user.Email, "user_welcome.tmpl", user)
-	if err != nil {
-		app.serverErrorResponse(writer, request, err)
-		return
-	}
+	app.background(func() {
+		err = app.mailer.Send(user.Email, "user_welcome.tmpl", user)
+		if err != nil {
+			app.logger.PrintError(err, nil)
+			return
+		}
+		app.logger.PrintInfo("successfully sent registration e-mail", map[string]string{"email": user.Email})
+	})
 
 	err = app.writeJSON(writer, http.StatusCreated, envelope{"user": user}, nil)
 	if err != nil {

@@ -8,7 +8,7 @@ confirm:
 
 ## run/api: run the cmd/api application
 run/api:
-	@go run ./cmd/api
+	@go run ./cmd/api -db-dsn=${GREENLIGHT_DB_DSN} -smtp-username=${MAILTRAP_USER} -smtp-password=${MAILTRAP_PW}
 
 ## db/psql: connect to the database using psql
 db/psql:

@@ -1,3 +1,5 @@
+include .envrc
+
 ## help: print this help message
 help:
 	@echo 'Usage:'

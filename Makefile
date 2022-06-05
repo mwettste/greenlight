@@ -62,3 +62,11 @@ build/api:
 	@echo 'Building cmd/api...'
 	go build -ldflags=${linker_flags} -o=./bin/api ./cmd/api
 	GOOS=linux GOARCH=amd64 go build -ldflags=${linker_flags} -o=./bin/linux_amd64/api ./cmd/api
+
+# ============================================================================= #
+# PRODUCTION
+# ============================================================================= #
+production_host_ip = '178.128.250.132'
+
+production/connect:
+	ssh -i $${HOME}/.ssh/id_rsa_greenlight greenlight@${production_host_ip}

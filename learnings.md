@@ -34,4 +34,5 @@ This does *not* apply, when running it from a makefile on Windows.o
 ## Strip debug info
 Use `-ldflags='s'` to strip the debug information and symbol table form the binary, which can result in a file that's around 25% smaller.
 
-
+## DigitalOcean - HTTP Server IP
+When deploying to a DigitalOcean Droplet, it is important to not start the http server on "127.0.0.1:4000" but instead use "0.0.0.0:4000", otherwise it won't be reachable!

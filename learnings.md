@@ -36,3 +36,7 @@ Use `-ldflags='s'` to strip the debug information and symbol table form the bina
 
 ## DigitalOcean - HTTP Server IP
 When deploying to a DigitalOcean Droplet, it is important to not start the http server on "127.0.0.1:4000" but instead use "0.0.0.0:4000", otherwise it won't be reachable!
+
+## DigitalOcean - SMTP Port
+Port 25 is disabled by default on a new account, to avoid spam. Not clear if this will be lifted after some time...
+Due to this, sending activation e-mail does not work for greenlight.

@@ -75,5 +75,10 @@ production/connect:
 production/deploy/api:
 	scp -i $${HOME}/.ssh/id_rsa_greenlight ./bin/linux_amd64/api greenlight@${production_host_ip}:~
 	scp -i $${HOME}/.ssh/id_rsa_greenlight -rp ./migrations greenlight@${production_host_ip}:~
-	ssh -i $${HOME}/.ssh/id_rsa_greenlight -t greenlight@${production_host_ip} 'migrate -path ~/migrations -database $$GREENLIGHT_DB_DSN up'
-	ssh -i $${HOME}/.ssh/id_rsa_greenlight -t greenlight@${production_host_ip} 'chmod +x ~/api'
+	scp -i $${HOME}/.ssh/id_rsa_greenlight ./remote/production/api.service greenlight@${production_host_ip}:~
+	ssh -i $${HOME}/.ssh/id_rsa_greenlight -t greenlight@${production_host_ip} '\
+	migrate -path ~/migrations -database $$GREENLIGHT_DB_DSN up \
+	&& chmod +x ~/api \
+	&& sudo mv ~/api.service /etc/systemd/system/ \
+	&& sudo systemctl enable api \
+	&& sudo systemctl restart api'

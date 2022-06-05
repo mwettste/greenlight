@@ -70,3 +70,10 @@ production_host_ip = '178.128.250.132'
 
 production/connect:
 	ssh -i $${HOME}/.ssh/id_rsa_greenlight greenlight@${production_host_ip}
+	
+
+production/deploy/api:
+	scp -i $${HOME}/.ssh/id_rsa_greenlight ./bin/linux_amd64/api greenlight@${production_host_ip}:~
+	scp -i $${HOME}/.ssh/id_rsa_greenlight -rp ./migrations greenlight@${production_host_ip}:~
+	ssh -i $${HOME}/.ssh/id_rsa_greenlight -t greenlight@${production_host_ip} 'migrate -path ~/migrations -database $$GREENLIGHT_DB_DSN up'
+	ssh -i $${HOME}/.ssh/id_rsa_greenlight -t greenlight@${production_host_ip} 'chmod +x ~/api'

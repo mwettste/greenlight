@@ -20,3 +20,18 @@ A preflight request is made by setting certain headers to test if the actual req
 * Access-Control-Request-Method
 * Access-Control-Request-Headers
 * Origin
+
+# go build
+## Windows specifics
+On Windows, when you want to specify the output directory of the binary, the path provided with the -o flag needs to be wrapped in quotation marks like so:
+
+```
+go build -o="./bin/api" ./cmd/api
+```
+
+This does *not* apply, when running it from a makefile on Windows.o
+
+## Strip debug info
+Use `-ldflags='s'` to strip the debug information and symbol table form the binary, which can result in a file that's around 25% smaller.
+
+

@@ -63,6 +63,11 @@ build/api:
 	go build -ldflags=${linker_flags} -o=./bin/api ./cmd/api
 	GOOS=linux GOARCH=amd64 go build -ldflags=${linker_flags} -o=./bin/linux_amd64/api ./cmd/api
 
+build/dbseeder:
+	@echo 'Building cmd/dbseeder...'
+	go build -ldflags=${linker_flags} -o=./bin/dbseeder ./cmd/dbseeder
+	GOOS=linux GOARCH=amd64 go build -ldflags=${linker_flags} -o=./bin/linux_amd64/dbseeder ./cmd/dbseeder
+
 # ============================================================================= #
 # PRODUCTION
 # ============================================================================= #
@@ -70,7 +75,11 @@ production_host_ip = '178.128.250.132'
 
 production/connect:
 	ssh -i $${HOME}/.ssh/id_rsa_greenlight greenlight@${production_host_ip}
-	
+
+production/seedDb: confirm
+	@echo 'Seeding the database on ${production_host_ip} with some default movies...'
+	scp -i $${HOME}/.ssh/id_rsa_greenlight -p ./bin/linux_amd64/dbseeder greenlight@${production_host_ip}:~
+	ssh -i $${HOME}/.ssh/id_rsa_greenlight -t greenlight@${production_host_ip} 'chmod +x ~/dbseeder && ~/dbseeder'
 
 production/deploy/api:
 	ssh -i $${HOME}/.ssh/id_rsa_greenlight -t greenlight@${production_host_ip} 'sudo systemctl stop api'

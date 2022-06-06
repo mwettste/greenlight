@@ -1,0 +1,8 @@
+{
+    email marco.wettstein@gmail.com
+}
+
+greenlight.wettsti.ch {
+    respond /debug/* "Not permitted" 403
+    reverse_proxy localhost:4000
+}

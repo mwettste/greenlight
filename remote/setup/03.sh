@@ -1,1 +1,0 @@
-echo "GREENLIGHT_HOSTNAME='0.0.0.0'" >> /etc/environment

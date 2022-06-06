@@ -20,7 +20,7 @@ User=greenlight
 Group=greenlight
 EnvironmentFile=/etc/environment
 WorkingDirectory=/home/greenlight
-ExecStart=/home/greenlight/api -port=4000 -db-dsn=${GREENLIGHT_DB_DSN} -env=production -smtp-username=${MAILTRAP_USERNAME} -smtp-password=${MAILTRAP_PW} -hostname=${GREENLIGHT_HOSTNAME}
+ExecStart=/home/greenlight/api -port=4000 -db-dsn=${GREENLIGHT_DB_DSN} -env=production -smtp-username=${MAILTRAP_USERNAME} -smtp-password=${MAILTRAP_PW}
 
 # Automatically restart the service after a 5-second wait if it exits with a non-zero 
 # exit code. If it restarts more than 5 times in 600 seconds, then the rate limit we

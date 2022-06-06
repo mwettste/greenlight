@@ -1,2 +1,5 @@
-echo "MAILTRAP_USER='6f17af72623ec8'" >> /etc/environment
-echo "MAILTRAP_PW='2a369b2824a42b'" >> /etc/environment
+read -p "Enter username for mailtrap account: " MAILTRAP_USER
+read -p "Enter password for mailtrap account: " MAILTRAP_PW
+
+echo "MAILTRAP_USER='${MAILTRAP_USER}'" >> /etc/environment
+echo "MAILTRAP_PW='${MAILTRAP_PW}'" >> /etc/environment

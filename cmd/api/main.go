@@ -24,10 +24,9 @@ var (
 )
 
 type config struct {
-	port     int
-	hostname string
-	env      string
-	db       struct {
+	port int
+	env  string
+	db   struct {
 		dsn          string
 		maxOpenConns int
 		maxIdleConns int
@@ -61,7 +60,6 @@ type application struct {
 func main() {
 	var cfg config
 
-	flag.StringVar(&cfg.hostname, "hostname", "127.0.0.1", "API hostname")
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
 

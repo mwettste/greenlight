@@ -56,6 +56,8 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 		}
 	}()
 
+	totalRateLimiterHits := expvar.NewInt("total_rate_limiter_hits")
+
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		if app.config.limiter.enabled {
 			ip := realip.FromRequest(request)
@@ -67,6 +69,7 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 
 			if !clients[ip].limiter.Allow() {
 				mu.Unlock()
+				totalRateLimiterHits.Add(1)
 				app.rateLimitExceededResponse(writer, request)
 				return
 			}
